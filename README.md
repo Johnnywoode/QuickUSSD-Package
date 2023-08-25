@@ -16,11 +16,9 @@ Via Composer
 ``` bash
 $ composer require johnnywoode/quickussd
 
-##Migrate the tables
-$ php artisan migrate --path=vendor/johnnywoode/quickussd/src/Http/migrations
-
 ##Add service provider
   "johnnywoode\quickussd\QuickUssdServiceProvider::class"
+
 ##migrate
 $ php artisan migrate
 
