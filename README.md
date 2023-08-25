@@ -22,6 +22,12 @@ $ composer require johnnywoode/quickussd
 ##migrate
 $ php artisan migrate
 
+##Add the following lines to your DatabaseSeeder class
+
+Model::unguard();
+$this->call(MenusTableSeeder::class);
+$this->call(MenuItemsTableSeeder::class);
+
 ##Seed only if you need sample app
 $ php artisan db:seed
 ```
