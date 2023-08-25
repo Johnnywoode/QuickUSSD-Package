@@ -2,7 +2,7 @@
 namespace johnnywoode\quickussd\Http\models;
 use Illuminate\Database\Eloquent\Model;
 
-class ussd_menu extends Model {
+class UssdMenu extends Model {
 
     protected $table = 'quickussd_menus';
 

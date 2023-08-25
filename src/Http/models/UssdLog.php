@@ -3,7 +3,7 @@
 namespace johnnywoode\quickussd\Http\models;
 use Illuminate\Database\Eloquent\Model;
 
-class ussd_logs extends Model {
+class UssdLog extends Model {
 
     protected $table = 'quickussd_logs';
 

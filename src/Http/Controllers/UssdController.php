@@ -28,12 +28,12 @@ class UssdController extends Controller
 		//        print_r($data);
 		//        exit;
 		//log USSD request
-		ussd_logs::create($data);
+		UssdLog::create($data);
 
 		//verify that the user exists
 		$no = substr($phoneNumber, -9);
 
-		$user = ussd_user::where('phone', "0" . $no)->orWhere('phone', "254" . $no)->first();
+		$user = UssdUser::where('phone', "0" . $no)->orWhere('phone', "254" . $no)->first();
 
 		if (!$user) {
 			//if user phone doesn't exist, we check out if they have been registered to mifos
@@ -44,7 +44,7 @@ class UssdController extends Controller
 			$usr['confirm_from'] = 0;
 			$usr['menu_item_id'] = 0;
 
-			$user = ussd_user::create($usr);
+			$user = UssdUser::create($usr);
 		}
 
 		if (self::user_is_starting($text)) {
@@ -112,7 +112,7 @@ class UssdController extends Controller
 			$user->progress = 1;
 			$user->save();
 			//get home menu
-			$menu = ussd_menu::find(2);
+			$menu = UssdMenu::find(2);
 			$menu_items = self::getMenuItems($menu->id);
 			$i = 1;
 			$response = $menu->title . PHP_EOL;
@@ -136,7 +136,7 @@ class UssdController extends Controller
 	//confirmUssdProcess
 	public function confirmUssdProcess($user, $message)
 	{
-		$menu = ussd_menu::find($user->menu_id);
+		$menu = UssdMenu::find($user->menu_id);
 		if (self::validationVariations($message, 1, "yes")) {
 			//if confirmed
 
@@ -194,7 +194,7 @@ class UssdController extends Controller
 		$amount = 0;
 		foreach ($menu_items as $key => $value) {
 
-			$response = ussd_response::whereUserIdAndMenuIdAndMenuItemId($user->id, $user->menu_id, $value->id)->orderBy('id', 'DESC')->first();
+			$response = UssdResponse::whereUserIdAndMenuIdAndMenuItemId($user->id, $user->menu_id, $value->id)->orderBy('id', 'DESC')->first();
 
 			$confirmation = $confirmation . PHP_EOL . $value->confirmation_phrase . ": " . $response->response;
 			$amount = $response->response;
@@ -214,7 +214,7 @@ class UssdController extends Controller
 	public function continueUssdMenuProcess($user, $message)
 	{
 
-		$menu = ussd_menu::find($user->menu_id);
+		$menu = UssdMenu::find($user->menu_id);
 
 		//check the user menu
 		switch ($menu->type) {
@@ -277,7 +277,7 @@ class UssdController extends Controller
 	public function continueSingleProcess($user, $message, $menu)
 	{
 		//validate input to be numeric
-		$menuItem = ussd_menu_items::whereMenuIdAndStep($menu->id, $user->progress)->first();
+		$menuItem = UssdMenuItem::whereMenuIdAndStep($menu->id, $user->progress)->first();
 		$message = str_replace(",", "", $message);
 
 		switch ($menu->id) {
@@ -285,7 +285,7 @@ class UssdController extends Controller
 				self::storeUssdResponse($user, $message);
 				//check if we have another step
 				$step = $user->progress + 1;
-				$menuItem = ussd_menu_items::whereMenuIdAndStep($menu->id, $step)->first();
+				$menuItem = UssdMenuItem::whereMenuIdAndStep($menu->id, $step)->first();
 				if ($menuItem) {
 
 					$user->menu_item_id = $menuItem->id;
@@ -337,7 +337,7 @@ class UssdController extends Controller
 			//save the response
 		} else {
 			//there is a selected choice
-			$menu = ussd_menu::find($next_menu_id);
+			$menu = UssdMenu::find($next_menu_id);
 			//next menu switch
 			$response = self::nextMenuSwitch($user, $menu);
 			return $response;
@@ -406,7 +406,7 @@ class UssdController extends Controller
 	{
 
 		$data = ['user_id' => $user->id, 'menu_id' => $user->menu_id, 'menu_item_id' => $user->menu_item_id, 'response' => $message];
-		return ussd_response::create($data);
+		return UssdResponse::create($data);
 	}
 
 	//single process
@@ -414,7 +414,7 @@ class UssdController extends Controller
 	public function singleProcess($menu, $user, $step)
 	{
 
-		$menuItem = ussd_menu_items::whereMenuIdAndStep($menu->id, $step)->first();
+		$menuItem = UssdMenuItem::whereMenuIdAndStep($menu->id, $step)->first();
 
 		if ($menuItem) {
 			//update user data and next request and send back
@@ -462,7 +462,7 @@ class UssdController extends Controller
 		$user->progress = 1;
 		$user->save();
 		//get home menu
-		$menu =  ussd_menu::find($menu_id);
+		$menu =  UssdMenu::find($menu_id);
 
 		$menu_items = self::getMenuItems($menu_id);
 
@@ -479,7 +479,7 @@ class UssdController extends Controller
 	//Menu Items Function
 	public static function getMenuItems($menu_id)
 	{
-		$menu_items = ussd_menu_items::whereMenuId($menu_id)->get();
+		$menu_items = UssdMenuItem::whereMenuId($menu_id)->get();
 		return $menu_items;
 	}
 
