@@ -41,9 +41,6 @@
 		"test": "phpunit"
 	},
 	"extra": {
-		"branch-alias": {
-			"main-dev": "v2.0.0"
-		}
 	},
 	"config": {
 		"allow-plugins": {
