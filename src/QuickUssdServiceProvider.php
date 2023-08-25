@@ -30,13 +30,13 @@ class QuickUssdServiceProvider extends ServiceProvider
 			__DIR__ . '/Http/migrations/' => database_path('/migrations')
 		], 'migrations');
 		$this->publishes([
-			__DIR__ . '/Http/seeds/' => database_path('/seeds')
+			__DIR__ . '/Http/seeds/' => database_path('/seeders')
 		], 'seeds');
 		$this->publishes([
 			__DIR__ . '/Http/Controllers/' => database_path('../app/Http/Controllers')
 		], 'Controllers');
 		$this->publishes([
-			__DIR__ . '/Http/models/' => database_path('../app/')
+			__DIR__ . '/Http/models/' => database_path('../app/Models')
 		], 'Models');
 	}
 
