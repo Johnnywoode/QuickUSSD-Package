@@ -1,5 +1,5 @@
 {
-	"name": "johnnywoode/quickussd-package",
+	"name": "johnnywoode/quickussd",
 	"type": "library",
 	"description": "QuickUSSD package for quick ussd development and prototyping",
 	"keywords": ["USSD", "QuickUssd"],
